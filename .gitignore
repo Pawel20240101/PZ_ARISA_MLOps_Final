@@ -8,3 +8,4 @@ mlruns
 mlartifacts
 .vscode
 .flake8
+*.egg-info/
