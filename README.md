@@ -151,11 +151,9 @@ Copy `heart_2020_cleaned.csv` into `data/raw/`
 
 5. Run MLflow UI  
 ```bash
-mlflow ui --port 5001
+mlflow ui
 # or
-mlflow ui --host 127.0.0.1 --port 5001
-```
-Open: [http://localhost:5001](http://localhost:5001)  
+mlflow ui --port 5000
 
 ---
 
