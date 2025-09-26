@@ -85,26 +85,22 @@ Develop a reliable, reproducible model to predict heart disease based on medical
 ## 🏗 Project Structure  
 ```bash
 PZ_ARISA_MLOps_Final/ 
-├── .devcontainer/ # konfiguracja Codespaces / Dockera 
-├── .github/workflows/ # pipeline CI/CD │ 
-├── data/ # dane projektu, dane pośrednie,przetworzone itp
-│ 
-├── models/ # zapisane modele i artefakty monitoringu 
-├── reports/ # raporty, wizualizacje 
-├── results/ # wyniki eksperymentów / predykcji 
-├── notebooks/ # notatniki Jupyter (EDA, eksperymenty) 
-│ 
-├── ARISA_DSML/ # główny kod źródłowy
-│ 
-├── tests/ # testy jednostkowe / integracyjne 
-│ 
-├── Makefile # automatyzacja (lint, test, train) 
-├── README.md # opis projektu 
-├── pyproject.toml # konfiguracja pakietu i zależności 
-├── setup.cfg # config narzędzi (flake8, black) 
-├── requirements.txt # lista zależności 
-└── .gitignore # ignorowane pliki i katalogi W ARISA_DSML 
-```
+├── .devcontainer/        # Codespaces / Docker configuration 
+├── .github/workflows/    # CI/CD pipeline
+├── data/                 # project data (raw, interim, processed, etc.)
+├── models/               # saved models and monitoring artifacts 
+├── docs/                # documents 
+├── reports/              # reports, visualizations 
+├── results/              # experiment / prediction outputs 
+├── notebooks/            # Jupyter notebooks (EDA, experiments) 
+├── ARISA_DSML/          # main source code (data prep, training, prediction, utilities)
+├── tests/                # unit / integration tests 
+├── Makefile              # automation (lint, test, train) 
+├── README.md            # project description 
+├── pyproject.toml        # package and dependency configuration 
+├── setup.cfg             # tool configuration (flake8, black) 
+├── requirements.txt      # list of dependencies 
+└── .gitignore            # ignored files and folders
 
 ---
 
