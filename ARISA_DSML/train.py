@@ -14,14 +14,8 @@ from mlflow.client import MlflowClient
 from sklearn.metrics import f1_score, log_loss
 from sklearn.model_selection import train_test_split
 
-from ARISA_DSML.config import (
-    FIGURES_DIR,
-    MODEL_NAME,
-    MODELS_DIR,
-    PROCESSED_DATA_DIR,
-    categorical,
-    target,
-)
+from ARISA_DSML.config import (FIGURES_DIR, MODEL_NAME, MODELS_DIR,
+                               PROCESSED_DATA_DIR, categorical, target)
 from ARISA_DSML.helpers import get_git_commit_hash
 
 
