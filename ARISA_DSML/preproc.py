@@ -1,14 +1,16 @@
 """Functions for preprocessing the data."""
 
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
+
+import pandas as pd
 from kaggle.api.kaggle_api_extended import KaggleApi
 from loguru import logger
-import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from ARISA_DSML.config import DATASET, PROCESSED_DATA_DIR, RAW_DATA_DIR, target, categorical
+from ARISA_DSML.config import (DATASET, PROCESSED_DATA_DIR, RAW_DATA_DIR,
+                               categorical, target)
 
 
 def get_raw_data(dataset: str = DATASET) -> None:
