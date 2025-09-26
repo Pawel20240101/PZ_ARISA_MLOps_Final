@@ -84,31 +84,26 @@ Develop a reliable, reproducible model to predict heart disease based on medical
 
 ## 🏗 Project Structure  
 ```bash
-├── LICENSE
-├── Makefile
-├── README.md
-├── data
-│   ├── external     # external datasets
-│   ├── interim      # intermediate processed data
-│   ├── processed    # final datasets (train/test)
-│   └── raw          # raw input data
-├── models           # trained models + predictions
-├── notebooks        # Jupyter notebooks (EDA, experiments)
-├── pyproject.toml
-├── references       # data dictionaries, manuals
-├── results          # generated plots, evaluation metrics
-├── reports          # final reports
-│   └── figures      # images used in reports
-├── requirements.txt
-├── setup.cfg
-└── ARISA_DSML
-    ├── __init__.py
-    ├── config.py
-    ├── helpers.py
-    ├── preproc.py
-    ├── train.py
-    ├── predict.py
-    └── resolve.py
+PZ_ARISA_MLOps_Final/ 
+├── .devcontainer/ # konfiguracja Codespaces / Dockera 
+├── .github/workflows/ # pipeline CI/CD │ 
+├── data/ # dane projektu, dane pośrednie,przetworzone itp
+│ 
+├── models/ # zapisane modele i artefakty monitoringu 
+├── reports/ # raporty, wizualizacje 
+├── results/ # wyniki eksperymentów / predykcji 
+├── notebooks/ # notatniki Jupyter (EDA, eksperymenty) 
+│ 
+├── ARISA_DSML/ # główny kod źródłowy
+│ 
+├── tests/ # testy jednostkowe / integracyjne 
+│ 
+├── Makefile # automatyzacja (lint, test, train) 
+├── README.md # opis projektu 
+├── pyproject.toml # konfiguracja pakietu i zależności 
+├── setup.cfg # config narzędzi (flake8, black) 
+├── requirements.txt # lista zależności 
+└── .gitignore # ignorowane pliki i katalogi W ARISA_DSML 
 ```
 
 ---
