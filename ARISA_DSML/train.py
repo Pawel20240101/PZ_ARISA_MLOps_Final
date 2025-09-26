@@ -2,15 +2,15 @@
 
 from pathlib import Path
 
+from catboost import CatBoostClassifier, Pool, cv
 import joblib
+from loguru import logger
 import mlflow
+from mlflow.client import MlflowClient
 import nannyml as nml
 import optuna
 import pandas as pd
 import plotly.graph_objects as go
-from catboost import CatBoostClassifier, Pool, cv
-from loguru import logger
-from mlflow.client import MlflowClient
 from sklearn.metrics import f1_score, log_loss
 from sklearn.model_selection import train_test_split
 

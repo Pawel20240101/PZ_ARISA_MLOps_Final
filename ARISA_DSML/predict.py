@@ -4,14 +4,14 @@ import json
 import os
 from pathlib import Path
 
+from catboost import CatBoostClassifier
+from loguru import logger
 import matplotlib.pyplot as plt
 import mlflow
+from mlflow.client import MlflowClient
 import nannyml as nml
 import pandas as pd
 import shap
-from catboost import CatBoostClassifier
-from loguru import logger
-from mlflow.client import MlflowClient
 
 from ARISA_DSML.config import (
     FIGURES_DIR,

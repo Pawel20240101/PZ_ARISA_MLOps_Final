@@ -1,12 +1,12 @@
 """Functions for preprocessing the data."""
 
 import os
-import shutil
 from pathlib import Path
+import shutil
 
-import pandas as pd
 from kaggle.api.kaggle_api_extended import KaggleApi
 from loguru import logger
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from ARISA_DSML.config import (

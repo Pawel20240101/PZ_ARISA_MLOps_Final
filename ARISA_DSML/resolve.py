@@ -1,5 +1,5 @@
-import mlflow
 from loguru import logger
+import mlflow
 from mlflow.client import MlflowClient
 
 from ARISA_DSML.config import MODEL_NAME
