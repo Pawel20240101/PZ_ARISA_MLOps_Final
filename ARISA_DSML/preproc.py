@@ -9,7 +9,13 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 from loguru import logger
 from sklearn.model_selection import train_test_split
 
-from ARISA_DSML.config import DATASET, PROCESSED_DATA_DIR, RAW_DATA_DIR, categorical, target
+from ARISA_DSML.config import (
+    DATASET,
+    PROCESSED_DATA_DIR,
+    RAW_DATA_DIR,
+    categorical,
+    target,
+)
 
 
 def get_raw_data(dataset: str = DATASET) -> None:
