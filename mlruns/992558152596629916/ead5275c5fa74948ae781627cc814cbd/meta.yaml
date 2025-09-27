@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/992558152596629916/ead5275c5fa74948ae781627cc814cbd/artifacts
+end_time: 1758971872420
+entry_point_name: ''
+experiment_id: '992558152596629916'
+lifecycle_stage: active
+run_id: ead5275c5fa74948ae781627cc814cbd
+run_name: loud-rook-181
+run_uuid: ead5275c5fa74948ae781627cc814cbd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758971872389
+status: 3
+tags: []
+user_id: vscode

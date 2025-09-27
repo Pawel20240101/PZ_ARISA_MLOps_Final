@@ -332,5 +332,3 @@ if __name__ == "__main__":
     model_path, model_params_path = train(
         X_train, y_train, categorical_features, params, cv_results=cv_results
     )
-
-best_model.save_model(MODELS_DIR / "model.cb")
