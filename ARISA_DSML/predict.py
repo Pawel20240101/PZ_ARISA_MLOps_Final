@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 from catboost import CatBoostClassifier
+import joblib
 from loguru import logger
 import matplotlib.pyplot as plt
 import mlflow
@@ -12,7 +13,6 @@ from mlflow.client import MlflowClient
 import nannyml as nml
 import pandas as pd
 import shap
-import joblib
 
 from ARISA_DSML.config import (
     FIGURES_DIR,
@@ -141,10 +141,9 @@ if __name__ == "__main__":
 
     from ARISA_DSML.helpers import get_git_commit_hash
 
-    #git_hash = get_git_commit_hash()
-    #mlflow.set_experiment("heart_disease_predictions")
-
-    #with mlflow.start_run(tags={"git_sha": git_hash}):
+    # git_hash = get_git_commit_hash()
+    # mlflow.set_experiment("heart_disease_predictions")
+    # with mlflow.start_run(tags={"git_sha": git_hash}):
     git_hash = str(get_git_commit_hash() or "")
     mlflow.set_experiment("heart_disease_predictions")
     with mlflow.start_run(tags={"git_sha": git_hash}):
@@ -163,6 +162,10 @@ if __name__ == "__main__":
             drift_df = analysis_df.drop(columns=["prediction", "predicted_probability"], axis=1)
             if target in drift_df.columns:
                 drift_df = drift_df.drop(columns=[target])
+
+            if "Race" in drift_df.columns:
+                drift_df = drift_df.drop(columns=["Race"])
+                logger.info("Dropped Race column to avoid drift calculation issues")
 
             univariate_drift = udc.calculate(drift_df)
             plot_col_names = drift_df.columns.tolist()

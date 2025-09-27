@@ -7,3 +7,10 @@ __pycache__
 .vscode
 .flake8
 *.egg-info/
+reports
+models
+mlruns
+mlartifacts
+data/raw
+data/processed
+.pytest_cache
