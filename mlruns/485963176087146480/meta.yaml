@@ -1,6 +1,0 @@
-artifact_location: mlflow-artifacts:/485963176087146480
-creation_time: 1758960795269
-experiment_id: '485963176087146480'
-last_update_time: 1758960795269
-lifecycle_stage: active
-name: heart_disease_v2
