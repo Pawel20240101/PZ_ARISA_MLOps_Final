@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/485963176087146480/c044da27545446098504907b4a44fb78/artifacts
+end_time: 1758962556256
+entry_point_name: ''
+experiment_id: '485963176087146480'
+lifecycle_stage: active
+run_id: c044da27545446098504907b4a44fb78
+run_name: catboost_v2
+run_uuid: c044da27545446098504907b4a44fb78
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758962556227
+status: 4
+tags: []
+user_id: vscode

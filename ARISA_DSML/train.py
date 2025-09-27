@@ -135,7 +135,11 @@ def train(
     log_params["feature_columns"] = X_train.columns.tolist()
     log_params["random_seed"] = 42
 
-    model = CatBoostClassifier(**log_params, verbose=True)
+    #model = CatBoostClassifier(**log_params, verbose=True)
+    params_for_model = {k: v for k, v in log_params.items() if k != "feature_columns"}
+    model = CatBoostClassifier(**params_for_model, verbose=True)
+
+
 
     with mlflow.start_run() as run:
         model.fit(
@@ -147,9 +151,21 @@ def train(
             plot=False,
         )
 
+        #MODELS_DIR.mkdir(parents=True, exist_ok=True)
+        #model_path = MODELS_DIR / "catboost_model.cbm"
+        #model.save_model(model_path)
+
         MODELS_DIR.mkdir(parents=True, exist_ok=True)
         model_path = MODELS_DIR / "catboost_model.cbm"
         model.save_model(model_path)
+
+        # Dodatkowy eksport uproszczony (do łatwego wczytania w predict.py)
+        local_model_path = MODELS_DIR / "model.cb"
+        model.save_model(local_model_path)
+        logger.info(f"Saved local model copy to {local_model_path}")
+
+
+
 
         mlflow.log_params(log_params)
         mlflow.catboost.log_model(model, "model")
@@ -316,3 +332,5 @@ if __name__ == "__main__":
     model_path, model_params_path = train(
         X_train, y_train, categorical_features, params, cv_results=cv_results
     )
+
+best_model.save_model(MODELS_DIR / "model.cb")

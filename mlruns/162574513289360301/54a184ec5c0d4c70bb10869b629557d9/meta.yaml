@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/162574513289360301/54a184ec5c0d4c70bb10869b629557d9/artifacts
+end_time: 1758967464067
+entry_point_name: ''
+experiment_id: '162574513289360301'
+lifecycle_stage: active
+run_id: 54a184ec5c0d4c70bb10869b629557d9
+run_name: thundering-snipe-772
+run_uuid: 54a184ec5c0d4c70bb10869b629557d9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758967450759
+status: 3
+tags: []
+user_id: vscode

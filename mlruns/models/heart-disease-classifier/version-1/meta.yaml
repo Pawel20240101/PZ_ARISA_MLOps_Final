@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1758968582302
+current_stage: None
+description: ''
+last_updated_timestamp: 1758968582302
+name: heart-disease-classifier
+run_id: 409b5b3402fb425baebedde51a1dd2ea
+run_link: ''
+source: mlflow-artifacts:/491534423288906432/409b5b3402fb425baebedde51a1dd2ea/artifacts/model
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/491534423288906432/409b5b3402fb425baebedde51a1dd2ea/artifacts/model
+user_id: null
+version: 1

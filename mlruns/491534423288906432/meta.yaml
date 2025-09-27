@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/491534423288906432
+creation_time: 1758967907723
+experiment_id: '491534423288906432'
+last_update_time: 1758967907723
+lifecycle_stage: active
+name: heart_disease_full_training

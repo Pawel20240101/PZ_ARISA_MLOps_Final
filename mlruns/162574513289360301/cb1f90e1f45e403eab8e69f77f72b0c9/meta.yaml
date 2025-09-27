@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/162574513289360301/cb1f90e1f45e403eab8e69f77f72b0c9/artifacts
+end_time: 1758967510555
+entry_point_name: ''
+experiment_id: '162574513289360301'
+lifecycle_stage: active
+run_id: cb1f90e1f45e403eab8e69f77f72b0c9
+run_name: victorious-boar-800
+run_uuid: cb1f90e1f45e403eab8e69f77f72b0c9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758967490792
+status: 3
+tags: []
+user_id: vscode

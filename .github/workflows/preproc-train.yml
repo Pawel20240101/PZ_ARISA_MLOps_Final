@@ -1,0 +1,25 @@
+name: Preproc data and train model
+
+on:
+  workflow_dispatch:   # ręczne uruchamianie
+  push:
+    branches: [ main, test2 ]
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run preprocessing and training
+        run: |
+          python ARISA_DSML/preproc.py
+          python ARISA_DSML/train.py

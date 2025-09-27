@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/162574513289360301/f4c0c240a75f4a40b67fe4824f63fe65/artifacts
+end_time: 1758967666345
+entry_point_name: ''
+experiment_id: '162574513289360301'
+lifecycle_stage: active
+run_id: f4c0c240a75f4a40b67fe4824f63fe65
+run_name: trusting-mole-798
+run_uuid: f4c0c240a75f4a40b67fe4824f63fe65
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758967635779
+status: 3
+tags: []
+user_id: vscode

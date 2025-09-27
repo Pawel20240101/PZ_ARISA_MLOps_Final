@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/162574513289360301/8feaad42b14646c0b8ddce510aa92023/artifacts
+end_time: 1758967542784
+entry_point_name: ''
+experiment_id: '162574513289360301'
+lifecycle_stage: active
+run_id: 8feaad42b14646c0b8ddce510aa92023
+run_name: nervous-eel-16
+run_uuid: 8feaad42b14646c0b8ddce510aa92023
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758967510560
+status: 3
+tags: []
+user_id: vscode

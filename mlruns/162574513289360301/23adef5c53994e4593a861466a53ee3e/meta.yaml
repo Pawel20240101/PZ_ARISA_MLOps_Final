@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/162574513289360301/23adef5c53994e4593a861466a53ee3e/artifacts
+end_time: 1758967338072
+entry_point_name: ''
+experiment_id: '162574513289360301'
+lifecycle_stage: active
+run_id: 23adef5c53994e4593a861466a53ee3e
+run_name: languid-cub-769
+run_uuid: 23adef5c53994e4593a861466a53ee3e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758967331723
+status: 3
+tags: []
+user_id: vscode

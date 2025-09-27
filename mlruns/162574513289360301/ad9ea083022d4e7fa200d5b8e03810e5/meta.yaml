@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/162574513289360301/ad9ea083022d4e7fa200d5b8e03810e5/artifacts
+end_time: 1758967363658
+entry_point_name: ''
+experiment_id: '162574513289360301'
+lifecycle_stage: active
+run_id: ad9ea083022d4e7fa200d5b8e03810e5
+run_name: shivering-foal-122
+run_uuid: ad9ea083022d4e7fa200d5b8e03810e5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758967341752
+status: 3
+tags: []
+user_id: vscode

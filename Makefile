@@ -51,3 +51,13 @@ predict:
 .PHONY: format  
 format:
 	black --line-length 99 ARISA_DSML
+
+# Uruchomienie testów i lintowania lokalnie
+test:
+	black --check ARISA_DSML/
+	isort --check-only ARISA_DSML/
+	flake8 ARISA_DSML/
+	pytest -v
+	$(PYTHON_INTERPRETER) -m ARISA_DSML.preproc
+	$(PYTHON_INTERPRETER) -m ARISA_DSML.train
+	$(PYTHON_INTERPRETER) -m ARISA_DSML.predict
