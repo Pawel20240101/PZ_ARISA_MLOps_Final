@@ -4,8 +4,13 @@ catboost_info
 kaggle.json
 __pycache__
 *.pyc
-mlruns
-mlartifacts
 .vscode
 .flake8
 *.egg-info/
+reports
+models
+mlruns
+mlartifacts
+data/raw
+data/processed
+.pytest_cache

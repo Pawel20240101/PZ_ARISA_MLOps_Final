@@ -110,6 +110,7 @@ def train_cv(
         fold_count=n,
         partition_random_seed=42,
         shuffle=True,
+        verbose=True,
     )
 
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
@@ -135,7 +136,9 @@ def train(
     log_params["feature_columns"] = X_train.columns.tolist()
     log_params["random_seed"] = 42
 
-    model = CatBoostClassifier(**log_params, verbose=True)
+    # model = CatBoostClassifier(**log_params, verbose=True)
+    params_for_model = {k: v for k, v in log_params.items() if k != "feature_columns"}
+    model = CatBoostClassifier(**params_for_model, verbose=True)
 
     with mlflow.start_run() as run:
         model.fit(
@@ -147,9 +150,18 @@ def train(
             plot=False,
         )
 
+        # MODELS_DIR.mkdir(parents=True, exist_ok=True)
+        # model_path = MODELS_DIR / "catboost_model.cbm"
+        # model.save_model(model_path)
+
         MODELS_DIR.mkdir(parents=True, exist_ok=True)
         model_path = MODELS_DIR / "catboost_model.cbm"
         model.save_model(model_path)
+
+        # Dodatkowy eksport uproszczony (do łatwego wczytania w predict.py)
+        local_model_path = MODELS_DIR / "model.cb"
+        model.save_model(local_model_path)
+        logger.info(f"Saved local model copy to {local_model_path}")
 
         mlflow.log_params(log_params)
         mlflow.catboost.log_model(model, "model")
@@ -177,7 +189,7 @@ def train(
                 title="Cross-Validation (N=5) Mean F1 score with Error Bands",
                 xtitle="Training Steps",
                 ytitle="Performance Score",
-                yaxis_range=[0.5, 1.0],
+                # yaxis_range=[0.5, 1.0],
             )
             mlflow.log_figure(fig1, "test-F1-mean_vs_iterations.png")
 
@@ -198,6 +210,7 @@ def train(
         reference_df["prediction"] = model.predict(X_train)
         reference_df["predicted_probability"] = [p[1] for p in model.predict_proba(X_train)]
         reference_df[target] = y_train.values if hasattr(y_train, "values") else y_train
+
         chunk_size = 5000
 
         udc = nml.UnivariateDriftCalculator(
