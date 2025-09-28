@@ -10,23 +10,28 @@ on:
       - 'ARISA_DSML/predict.py'
       - 'models/catboost_model.cbm'
   workflow_dispatch:  
+
 jobs:
   preprocess:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with: 
           python-version: "3.11"
+
       - name: Install dependencies
         run: make requirements
+
       - name: Configure Kaggle
         run: |
           mkdir -p $HOME/.config/kaggle
-          cp kaggle.json $HOME/.config/kaggle/kaggle.json
+          echo "{\"username\":\"${{ secrets.KAGGLE_USERNAME }}\",\"key\":\"${{ secrets.KAGGLE_KEY }}\"}" > $HOME/.config/kaggle/kaggle.json
           chmod 600 $HOME/.config/kaggle/kaggle.json
+
       - name: Run preprocessing
         run: make preprocess
 
