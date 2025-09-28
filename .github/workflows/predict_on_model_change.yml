@@ -71,6 +71,11 @@ jobs:
             --port 5000 > mlflow.log 2>&1 &
           sleep 5
 
+      - name: Train model
+        env:
+          MLFLOW_TRACKING_URI: "http://localhost:5000"
+        run: make train
+
       - name: Resolve champion/challenger
         env:
           MLFLOW_TRACKING_URI: "http://localhost:5000"
