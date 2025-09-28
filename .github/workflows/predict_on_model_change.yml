@@ -9,6 +9,15 @@ on:
       - 'data/processed/test.csv'
       - 'ARISA_DSML/predict.py'
       - 'models/catboost_model.cbm'
+    
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'data/raw/test.csv'
+      - 'data/processed/test.csv'
+      - 'ARISA_DSML/predict.py'
+      - 'models/catboost_model.cbm'
   workflow_dispatch:  
 
 jobs:
