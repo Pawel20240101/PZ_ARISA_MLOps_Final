@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - test2
+      - main
     paths:  
       - 'data/raw/test.csv'
       - 'data/processed/test.csv'
