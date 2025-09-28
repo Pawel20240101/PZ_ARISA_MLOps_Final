@@ -3,13 +3,13 @@ name: Preproc data and train model
 on: 
   push:
     branches:
-      - test2   # zamiast main, żeby testować w Twojej gałęzi
-    paths:  # (re)train when train data changes or when the preproc or train code changes
+      - test2   
+    paths:  
       - 'data/raw/train.csv'
       - 'data/processed/train.csv'
       - 'ARISA_DSML/preproc.py'
       - 'ARISA_DSML/train.py'
-      - 'models/best_params.pkl'  # retrain after hyperparam tuning
+      - 'models/best_params.pkl'  
 
 jobs:
   preprocess:
