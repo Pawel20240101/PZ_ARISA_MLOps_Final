@@ -62,6 +62,15 @@ jobs:
       - name: Install dependencies
         run: make requirements
 
+      - name: Start MLflow tracking server
+        run: |
+          nohup mlflow server \
+            --backend-store-uri sqlite:///mlflow.db \
+            --default-artifact-root file:./mlruns \
+            --host 0.0.0.0 \
+            --port 5000 > mlflow.log 2>&1 &
+          sleep 5
+
       - name: Resolve champion/challenger
         env:
           MLFLOW_TRACKING_URI: "http://localhost:5000"
