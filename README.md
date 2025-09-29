@@ -179,7 +179,11 @@ make format              # Auto-format code
 ### CI/CD (GitHub Actions)
 - **ci.yml** (push/PR to main/test): linting, formatting, unit tests
 - **lint-code.yml** (PR to main): additional code quality checks
-- **No ML pipeline in CI** - only code quality (fast, lightweight)
+- **predict_on_model_change.yml** (push to main/test2, workflow_dispatch): 
+  - Automatic data preprocessing from Kaggle
+  - Model training with MLflow
+  - Champion/challenger resolution
+  - Prediction generation and saving
 
 ---
 
@@ -224,7 +228,9 @@ Large files excluded via `.gitignore`:
 - **GitHub Actions:** code quality only (linting, formatting, tests)
 - **Branch protection:** main branch requires PR + reviews
 - **Automated checks:** black, flake8, isort, pytest
-- **No ML training in CI** - keeps pipelines fast and focused
+- **Prediction pipeline:** runs full MLOps cycle (preprocess → train → resolve → predict)
+- **Artifacts:** processed data and predictions available as workflow artifacts
+- **MLflow in CI:** tracking server started automatically for experiments
 
 ---
 
