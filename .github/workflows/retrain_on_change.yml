@@ -3,13 +3,20 @@ name: Preproc data and train model
 on: 
   push:
     branches:
-      - test2   
+      - test2
+      - main
     paths:  
       - 'data/raw/train.csv'
       - 'data/processed/train.csv'
       - 'ARISA_DSML/preproc.py'
       - 'ARISA_DSML/train.py'
-      - 'models/best_params.pkl'  
+      - 'models/best_params.pkl'
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
 
 jobs:
   preprocess:
