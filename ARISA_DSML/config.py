@@ -1,5 +1,6 @@
 """Config file for module."""
 
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -42,3 +43,26 @@ categorical = [
 ]
 
 target = "HeartDisease"
+
+# MLflow Configuration
+# Priorytet: AWS RDS > MLFLOW_TRACKING_URI z env > localhost
+if os.getenv("MLFLOWDBENDPOINT"):
+    # AWS RDS PostgreSQL backend
+    MLFLOW_TRACKING_URI = (
+        f"postgresql://{os.getenv('MLFLOWDBUSERNAME')}:"
+        f"{os.getenv('MLFLOWDBPASS')}@"
+        f"{os.getenv('MLFLOWDBENDPOINT')}:"
+        f"{os.getenv('MLFLOWDBPORT')}/"
+        f"{os.getenv('MLFLOWDB')}"
+    )
+    logger.info("Using AWS RDS as MLflow backend")
+else:
+    # Lokalny tracking URI
+    MLFLOW_TRACKING_URI = os.getenv(
+        "MLFLOW_TRACKING_URI",
+        "http://localhost:5000"
+    )
+    logger.info(f"Using MLflow tracking URI: {MLFLOW_TRACKING_URI}")
+
+# S3 Artifact Store (opcjonalne - dla AWS)
+ARTIFACT_BUCKET = os.getenv("ARTIFACT_BUCKET", None)

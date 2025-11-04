@@ -16,6 +16,7 @@ from sklearn.model_selection import train_test_split
 
 from ARISA_DSML.config import (
     FIGURES_DIR,
+    MLFLOW_TRACKING_URI,  # <-- dodaj tu też do importu
     MODEL_NAME,
     MODELS_DIR,
     PROCESSED_DATA_DIR,
@@ -23,6 +24,10 @@ from ARISA_DSML.config import (
     target,
 )
 from ARISA_DSML.helpers import get_git_commit_hash
+
+# MLflow URI configuration
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+logger.info(f"MLflow tracking URI set to: {MLFLOW_TRACKING_URI}")  # <-- dodaj info
 
 
 def run_hyperopt(
@@ -136,7 +141,6 @@ def train(
     log_params["feature_columns"] = X_train.columns.tolist()
     log_params["random_seed"] = 42
 
-    # model = CatBoostClassifier(**log_params, verbose=True)
     params_for_model = {k: v for k, v in log_params.items() if k != "feature_columns"}
     model = CatBoostClassifier(**params_for_model, verbose=True)
 
@@ -149,10 +153,6 @@ def train(
             use_best_model=False,
             plot=False,
         )
-
-        # MODELS_DIR.mkdir(parents=True, exist_ok=True)
-        # model_path = MODELS_DIR / "catboost_model.cbm"
-        # model.save_model(model_path)
 
         MODELS_DIR.mkdir(parents=True, exist_ok=True)
         model_path = MODELS_DIR / "catboost_model.cbm"
@@ -177,6 +177,14 @@ def train(
             key="git_sha",
             value=get_git_commit_hash(),
         )
+        
+        # Loguj metryki CV dla champion/challenger
+        if cv_results is not None:
+            f1_mean = cv_results["test-F1-mean"].iloc[-1]
+            f1_std = cv_results["test-F1-std"].iloc[-1]
+            mlflow.log_metric("f1_cv_mean", f1_mean)  # <-- WAŻNE dla resolve.py!
+            mlflow.log_metric("f1_cv_std", f1_std)
+            logger.info(f"CV F1: {f1_mean:.4f} ± {f1_std:.4f}")
 
         model_params_path = MODELS_DIR / "model_params.pkl"
         save_params = log_params.copy()
@@ -189,7 +197,6 @@ def train(
                 title="Cross-Validation (N=5) Mean F1 score with Error Bands",
                 xtitle="Training Steps",
                 ytitle="Performance Score",
-                # yaxis_range=[0.5, 1.0],
             )
             mlflow.log_figure(fig1, "test-F1-mean_vs_iterations.png")
 
@@ -295,13 +302,6 @@ def plot_error_scatter(
     return fig
 
 
-def get_or_create_experiment(experiment_name: str):
-    """Retrieve the ID of an existing MLflow experiment or create a new one."""
-    if experiment := mlflow.get_experiment_by_name(experiment_name):
-        return experiment.experiment_id
-    return mlflow.create_experiment(experiment_name)
-
-
 if __name__ == "__main__":
     df_train = pd.read_csv(PROCESSED_DATA_DIR / "train.csv")
 
@@ -316,16 +316,14 @@ if __name__ == "__main__":
     categorical_features = [col for col in categorical if col in X_train.columns]
     logger.info(f"Categorical features: {categorical_features}")
 
-    experiment_id = get_or_create_experiment("heart_disease_hyperparam_tuning")
-    mlflow.set_experiment(experiment_id=experiment_id)
+    mlflow.set_experiment("heart_disease_hyperparam_tuning")
     best_params_path = run_hyperopt(X_train, y_train, categorical_features)
     params = joblib.load(best_params_path)
 
     cv_output_path = train_cv(X_train, y_train, categorical_features, params)
     cv_results = pd.read_csv(cv_output_path)
 
-    experiment_id = get_or_create_experiment("heart_disease_full_training")
-    mlflow.set_experiment(experiment_id=experiment_id)
+    mlflow.set_experiment("heart_disease_full_training")
     model_path, model_params_path = train(
         X_train, y_train, categorical_features, params, cv_results=cv_results
     )

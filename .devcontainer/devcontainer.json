@@ -1,9 +1,10 @@
 {
 	"name": "ARISA-MLOps-devcontainer",
 	"image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
-	"postCreateCommand": "pip install --no-cache-dir mlflow==2.12.1 && apt-get update && apt-get install -y libgbm1 libnss3",
-	"postStartCommand": "mkdir -p /home/vscode/mlflow/artifacts && mlflow ui --backend-store-uri sqlite:////home/vscode/mlflow/mlflow.db --default-artifact-root file:///home/vscode/mlflow/artifacts --host 0.0.0.0 --port 5000 &",
-	"updateContentCommand": "pip install -e .",
+	
+	"postCreateCommand": "pip install --no-cache-dir -e . && pip install psycopg2-binary boto3",
+	
+	"postStartCommand": "bash -c 'if [ -n \"$MLFLOWDBENDPOINT\" ]; then echo \"Starting MLflow with AWS RDS backend...\"; mlflow server --backend-store-uri postgresql://$MLFLOWDBUSERNAME:$MLFLOWDBPASS@$MLFLOWDBENDPOINT:$MLFLOWDBPORT/$MLFLOWDB --default-artifact-root s3://$ARTIFACT_BUCKET/mlartifacts --host 0.0.0.0 --port 5000 & else echo \"Starting MLflow with local SQLite backend...\"; mkdir -p /workspace/mlruns && mlflow ui --backend-store-uri sqlite:////workspace/mlruns/mlflow.db --default-artifact-root file:///workspace/mlruns/mlartifacts --host 0.0.0.0 --port 5000 & fi'",
 	
 	"forwardPorts": [5000],
 	
@@ -32,7 +33,7 @@
 	
 	"containerEnv": {
 		"iscontainer": "y",
-        "MLFLOW_TRACKING_URI": "http://localhost:5000"
+		"MLFLOW_TRACKING_URI": "http://localhost:5000"
 	},
 	
 	"portsAttributes": {
@@ -44,19 +45,28 @@
 	
 	"secrets": {
 		"MLFLOWDBUSERNAME": {
-			"description": "Username for authenticating the Mlflow backend db connection."
+			"description": "Username for authenticating the MLflow backend db connection."
 		},
 		"MLFLOWDBPASS": { 
-			"description": "Password for authenticating the Mlflow backend db connection."
+			"description": "Password for authenticating the MLflow backend db connection."
 		},
 		"MLFLOWDBENDPOINT": { 
-			"description": "Endpoint where the Mlflow backend is publicly available."
+			"description": "Endpoint where the MLflow backend is publicly available."
 		},
 		"MLFLOWDBPORT": { 
-			"description": "Port where the Mlflow backend db is exposed."
+			"description": "Port where the MLflow backend db is exposed."
 		},
 		"MLFLOWDB": { 
-			"description": "Name of Mlflow backend db."
+			"description": "Name of MLflow backend db."
+		},
+		"AWS_ACCESS_KEY_ID": {
+			"description": "AWS access key for S3 artifact storage."
+		},
+		"AWS_SECRET_ACCESS_KEY": {
+			"description": "AWS secret key for S3 artifact storage."
+		},
+		"ARTIFACT_BUCKET": {
+			"description": "S3 bucket name for MLflow artifacts (e.g., heart-disease-mlflow-artifacts)."
 		}
 	}
 }

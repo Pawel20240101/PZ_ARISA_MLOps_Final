@@ -16,12 +16,18 @@ import shap
 
 from ARISA_DSML.config import (
     FIGURES_DIR,
+    MLFLOW_TRACKING_URI,
     MODEL_NAME,
     MODELS_DIR,
     PROCESSED_DATA_DIR,
     target,
 )
+from ARISA_DSML.helpers import get_git_commit_hash  # <-- przeniesione na górę
 from ARISA_DSML.resolve import get_model_by_alias
+
+# MLflow URI configuration
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+logger.info(f"MLflow tracking URI set to: {MLFLOW_TRACKING_URI}")  # <-- info
 
 
 def plot_shap(model: CatBoostClassifier, df_plot: pd.DataFrame) -> None:
@@ -98,10 +104,12 @@ if __name__ == "__main__":
             estimator = store.load(filename="estimator.pkl", as_type=nml.CBPE)
             logger.info("Loaded UDC and Estimator from local files")
         else:
+            logger.warning("UDC/Estimator not found locally")
             udc, estimator = None, None
 
     else:
         # --- Fallback: ładowanie z MLflow ---
+        logger.info("Local model not found, loading from MLflow")
         client = MlflowClient(mlflow.get_tracking_uri())
         model_info = get_model_by_alias(client, alias="champion")
         if model_info is None:
@@ -139,51 +147,59 @@ if __name__ == "__main__":
     analysis_df["prediction"] = df_preds[target].values
     analysis_df["predicted_probability"] = df_preds["predicted_probability"].values
 
-    from ARISA_DSML.helpers import get_git_commit_hash
-
-    # git_hash = get_git_commit_hash()
-    # mlflow.set_experiment("heart_disease_predictions")
-    # with mlflow.start_run(tags={"git_sha": git_hash}):
     git_hash = str(get_git_commit_hash() or "")
     mlflow.set_experiment("heart_disease_predictions")
+    
     with mlflow.start_run(tags={"git_sha": git_hash}):
-
+        logger.info("Starting prediction logging to MLflow")
+        
         # performance estimate (jeśli estimator istnieje)
-        try:
-            estimated_performance = estimator.estimate(analysis_df)
-            fig1 = estimated_performance.plot()
-            mlflow.log_figure(fig1, "estimated_performance.png")
-            plt.close()
-        except Exception:
+        if estimator is not None:  # <-- warunek
+            try:
+                estimated_performance = estimator.estimate(analysis_df)
+                fig1 = estimated_performance.plot()
+                mlflow.log_figure(fig1, "estimated_performance.png")
+                plt.close()
+                logger.info("Logged performance estimation")
+            except Exception as e:
+                logger.warning(f"Estimator failed: {str(e)}")
+        else:
             logger.warning("Estimator not available, skipping performance estimation")
 
         # univariate drift (jeśli udc istnieje)
-        try:
-            drift_df = analysis_df.drop(columns=["prediction", "predicted_probability"], axis=1)
-            if target in drift_df.columns:
-                drift_df = drift_df.drop(columns=[target])
+        if udc is not None:  # <-- warunek
+            try:
+                drift_df = analysis_df.drop(columns=["prediction", "predicted_probability"], axis=1)
+                if target in drift_df.columns:
+                    drift_df = drift_df.drop(columns=[target])
 
-            if "Race" in drift_df.columns:
-                drift_df = drift_df.drop(columns=["Race"])
-                logger.info("Dropped Race column to avoid drift calculation issues")
+                if "Race" in drift_df.columns:
+                    drift_df = drift_df.drop(columns=["Race"])
+                    logger.info("Dropped Race column to avoid drift calculation issues")
 
-            univariate_drift = udc.calculate(drift_df)
-            plot_col_names = drift_df.columns.tolist()
+                univariate_drift = udc.calculate(drift_df)
+                plot_col_names = drift_df.columns.tolist()
 
-            for p in plot_col_names:
-                try:
-                    fig2 = univariate_drift.filter(column_names=[p]).plot()
-                    mlflow.log_figure(fig2, f"univariate_drift_{p}.png")
-                    plt.close()
+                for p in plot_col_names:
+                    try:
+                        fig2 = univariate_drift.filter(column_names=[p]).plot()
+                        mlflow.log_figure(fig2, f"univariate_drift_{p}.png")
+                        plt.close()
 
-                    fig3 = univariate_drift.filter(period="analysis", column_names=[p]).plot(
-                        kind="distribution"
-                    )
-                    mlflow.log_figure(fig3, f"univariate_drift_dist_{p}.png")
-                    plt.close()
-                except Exception as e:
-                    logger.info(f"Failed to plot univariate drift for {p}: {str(e)}")
-        except Exception:
+                        fig3 = univariate_drift.filter(period="analysis", column_names=[p]).plot(
+                            kind="distribution"
+                        )
+                        mlflow.log_figure(fig3, f"univariate_drift_dist_{p}.png")
+                        plt.close()
+                    except Exception as e:
+                        logger.info(f"Failed to plot univariate drift for {p}: {str(e)}")
+                
+                logger.info("Logged drift analysis")
+            except Exception as e:
+                logger.warning(f"UDC failed: {str(e)}")
+        else:
             logger.warning("UDC not available, skipping drift calculation")
 
         mlflow.log_params({"git_hash": git_hash})
+        mlflow.log_artifact(str(preds_path))  # <-- predykcje do MLflow
+        logger.info("Prediction run completed")
