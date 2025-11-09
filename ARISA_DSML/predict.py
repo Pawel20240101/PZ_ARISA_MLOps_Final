@@ -149,10 +149,10 @@ if __name__ == "__main__":
 
     git_hash = str(get_git_commit_hash() or "")
     mlflow.set_experiment("heart_disease_predictions")
-    
+
     with mlflow.start_run(tags={"git_sha": git_hash}):
         logger.info("Starting prediction logging to MLflow")
-        
+
         # performance estimate (jeśli estimator istnieje)
         if estimator is not None:  # <-- warunek
             try:
@@ -169,7 +169,9 @@ if __name__ == "__main__":
         # univariate drift (jeśli udc istnieje)
         if udc is not None:  # <-- warunek
             try:
-                drift_df = analysis_df.drop(columns=["prediction", "predicted_probability"], axis=1)
+                drift_df = analysis_df.drop(
+                    columns=["prediction", "predicted_probability"], axis=1
+                )
                 if target in drift_df.columns:
                     drift_df = drift_df.drop(columns=[target])
 
@@ -193,7 +195,7 @@ if __name__ == "__main__":
                         plt.close()
                     except Exception as e:
                         logger.info(f"Failed to plot univariate drift for {p}: {str(e)}")
-                
+
                 logger.info("Logged drift analysis")
             except Exception as e:
                 logger.warning(f"UDC failed: {str(e)}")

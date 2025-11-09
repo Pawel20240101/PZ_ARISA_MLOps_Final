@@ -58,10 +58,7 @@ if os.getenv("MLFLOWDBENDPOINT"):
     logger.info("Using AWS RDS as MLflow backend")
 else:
     # Lokalny tracking URI
-    MLFLOW_TRACKING_URI = os.getenv(
-        "MLFLOW_TRACKING_URI",
-        "http://localhost:5000"
-    )
+    MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5000")
     logger.info(f"Using MLflow tracking URI: {MLFLOW_TRACKING_URI}")
 
 # S3 Artifact Store (opcjonalne - dla AWS)

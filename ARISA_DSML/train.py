@@ -177,7 +177,7 @@ def train(
             key="git_sha",
             value=get_git_commit_hash(),
         )
-        
+
         # Loguj metryki CV dla champion/challenger
         if cv_results is not None:
             f1_mean = cv_results["test-F1-mean"].iloc[-1]

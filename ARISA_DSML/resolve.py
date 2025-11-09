@@ -28,30 +28,25 @@ def get_model_by_alias(client, model_name: str = MODEL_NAME, alias: str = "champ
 if __name__ == "__main__":
     logger.info("Starting model resolution process")
     client = MlflowClient(mlflow.get_tracking_uri())
-    
+
     champ_mv = get_model_by_alias(client)
-    
+
     if champ_mv is None:
         logger.info("No champion model exists")
         chall_mv = get_model_by_alias(client, alias="challenger")
-        
+
         if chall_mv is None:
             logger.info("No challenger model exists either")
             try:
                 model_info = client.get_latest_versions(MODEL_NAME)[0]
-                logger.info(
-                    f"Promoting newest model (version {model_info.version}) to champion"
-                )
+                logger.info(f"Promoting newest model (version {model_info.version}) to champion")
                 client.set_registered_model_alias(MODEL_NAME, "champion", model_info.version)
                 logger.info("✅ Champion set successfully")
             except IndexError:
                 logger.error(f"No models found in registry for {MODEL_NAME}")
                 raise Exception(f"No models available to promote for {MODEL_NAME}")
         else:
-            logger.info(
-                f"Found challenger (version {chall_mv.version}), "
-                "promoting to champion"
-            )
+            logger.info(f"Found challenger (version {chall_mv.version}), " "promoting to champion")
             client.delete_registered_model_alias(MODEL_NAME, "challenger")
             client.set_registered_model_alias(MODEL_NAME, "champion", chall_mv.version)
             logger.info("✅ Challenger promoted to champion")
@@ -61,10 +56,10 @@ if __name__ == "__main__":
 
     if champ_mv is not None and chall_mv is not None:
         logger.info("Both champion and challenger exist - comparing metrics")
-        
+
         champ_run = client.get_run(champ_mv.run_id)
         chall_run = client.get_run(chall_mv.run_id)
-        
+
         # Bezpieczne pobieranie metryk
         try:
             f1_champ = champ_run.data.metrics["f1_cv_mean"]
@@ -79,9 +74,7 @@ if __name__ == "__main__":
 
         if f1_chall >= f1_champ:
             improvement = ((f1_chall - f1_champ) / f1_champ) * 100
-            logger.info(
-                f"✅ Challenger surpassed champion by {improvement:.2f}% - promoting!"
-            )
+            logger.info(f"✅ Challenger surpassed champion by {improvement:.2f}% - promoting!")
             client.delete_registered_model_alias(MODEL_NAME, "challenger")
             client.set_registered_model_alias(MODEL_NAME, "champion", chall_mv.version)
             logger.info(f"✅ New champion: version {chall_mv.version}")
@@ -94,7 +87,7 @@ if __name__ == "__main__":
             )
             logger.error(challenge_failed_exc)
             raise Exception(challenge_failed_exc)
-            
+
     elif champ_mv is not None and chall_mv is None:
         logger.info(f"✅ No challenger - continuing with champion (version {champ_mv.version})")
     else:
