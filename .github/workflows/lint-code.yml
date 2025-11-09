@@ -3,6 +3,8 @@ name: code checking
 
 # run on pull request
 on:
+  push:
+    branches: [ test2, AWS ]
   pull_request:
     branches:
       - main
