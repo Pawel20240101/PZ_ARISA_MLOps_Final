@@ -16,13 +16,13 @@ from sklearn.model_selection import train_test_split
 
 from ARISA_DSML.config import (
     FIGURES_DIR,
-    MLFLOW_TRACKING_URI,  # <-- dodaj tu też do importu
     MODEL_NAME,
     MODELS_DIR,
     PROCESSED_DATA_DIR,
     categorical,
     target,
 )
+from ARISA_DSML.config import MLFLOW_TRACKING_URI  # <-- dodaj tu też do importu
 from ARISA_DSML.helpers import get_git_commit_hash
 
 # MLflow URI configuration

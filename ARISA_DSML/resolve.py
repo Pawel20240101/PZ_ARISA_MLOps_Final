@@ -4,7 +4,7 @@ from loguru import logger
 import mlflow
 from mlflow.client import MlflowClient
 
-from ARISA_DSML.config import MODEL_NAME, MLFLOW_TRACKING_URI
+from ARISA_DSML.config import MLFLOW_TRACKING_URI, MODEL_NAME
 
 # MLflow URI configuration
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
